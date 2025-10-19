@@ -11,19 +11,19 @@ Option(0,0); //(0,0)=EchoOff   (0,1)=EchoOn
 #include "/Kernel/KernelC.HH"
 #include "/Compiler/CompilerB.HH"
 
-Option(OPTf_WARN_PAREN,ON);
-Option(OPTf_WARN_DUP_TYPES,ON);
-HashTablePurge(adam_task->hash_table);
+Option(OPTf_WARN_PAREN,ON); //enable paren warnings
+Option(OPTf_WARN_DUP_TYPES,ON); //enable dup type warnings
+HashTablePurge(adam_task->hash_table); //clear old hashes
 
 #include "/Adam/MakeAdam"
 
-//Dbg("Type 'G;'");
+//Setup terminal & window
 DocTermNew;
 WinVert(2,10);
 
-sys_winmgr_task=Spawn(&WinMgrTask,NULL,"Window Mgr");
+sys_winmgr_task=Spawn(&WinMgrTask,NULL,"Window Mgr"); //start window manager
 Fs->win_inhibit=WIG_TASK_DFT-WIF_SELF_BORDER
-	-WIF_SELF_GRAB_SCROLL-WIF_SELF_CTRLS;
+    -WIF_SELF_GRAB_SCROLL-WIF_SELF_CTRLS;
 LBts(&Fs->display_flags,DISPLAYf_CHILDREN_NOT_ON_TOP);
 LBts(&Fs->display_flags,DISPLAYf_SHOW);
 RegInit;
@@ -33,8 +33,9 @@ if (!ins_reg.registered)
 
 WallPaperInit;
 
+//Create tmp dir if writable
 if (DrvIsWritable)
-  DirMk("/Tmp"); //Good to have a Tmp
+  DirMk("/Tmp");
 
 Option(OPTf_WARN_PAREN,OFF);
 Option(OPTf_WARN_DUP_TYPES,OFF);
